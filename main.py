@@ -26,7 +26,7 @@ if uploaded_file is not None:
             )
             st.success(
                 f"Data ingested successfully into the '{
-                       st.session_state.table_name}' table."
+                    st.session_state.table_name}' table."
             )
             st.session_state.prompt = prompt_Design(
                 st.session_state.table_name, st.session_state.fields
@@ -55,4 +55,4 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
             if response:
                 df = pd.DataFrame(response, columns=column)
                 st.markdown(create_styled_table(df), unsafe_allow_html=True)
-                st.table(df)
+                # st.table(df)
