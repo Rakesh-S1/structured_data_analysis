@@ -5,55 +5,35 @@ import streamlit as st
 from typing import Literal
 from dotenv import load_dotenv
 import google.generativeai as genai
+import matplotlib.pyplot as plt,seaborn as sns
 
 load_dotenv()
 genai.configure(api_key=os.getenv("api_key"))
 
 def create_styled_table(df):
     # Convert DataFrame to HTML
-    table_html = df.to_html(index=False, classes='styled-table', escape=False)
+    st.markdown(
+        '''
+        <style>
+        .dataframe thead th {
+            font-weight: bold;
+            text-align: center;
+        }
+        .dataframe tbody tr td {
+            text-align: center;
+        }
+        </style>
+        ''',
+        unsafe_allow_html=True
+    )
     
-    # Define custom CSS for table
-    table_style = """
-    <style>
-    .styled-table {
-        border-collapse: collapse;
-        margin: 25px 0;
-        font-size: 18px;
-        font-family: Arial, sans-serif;
-        min-width: 400px;
-        width: 100%;
-        text-align: left;
-    }
-    .styled-table th {
-        background-color: #4CAF50;
-        color: white;
-        font-weight: bold;
-        padding: 12px 15px;
-    }
-    .styled-table td {
-        padding: 12px 15px;
-    }
-    .styled-table tbody tr {
-        border-bottom: 1px solid #dddddd;
-    }
-    .styled-table tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-    }
-    .styled-table tbody tr:last-of-type {
-        border-bottom: 2px solid #4CAF50;
-    }
-    .table-container {
-        max-height: 400px;  /* Fixed height for the table */
-        overflow-y: auto;   /* Scrollable content */
-        width: 100%;
-    }
-    </style>
-    """
+    styled_df = df.style.set_properties(**{
+        'text-align': 'center'
+    }).set_table_styles(
+        [{'selector': 'thead th', 'props': [('font-weight', 'bold')]}]
+    )
     
-    # Combine table style and content
-    full_html = f"{table_style}<div class='table-container'>{table_html}</div>"
-    return full_html
+    return styled_df
 
 def data_ingestion(dataset, table_name, type: Literal["c", "j"] = "c"):
     if type == "c":
@@ -63,7 +43,7 @@ def data_ingestion(dataset, table_name, type: Literal["c", "j"] = "c"):
     fields = data.columns.to_list()
     data.ffill(inplace=True)
     with sqlite3.connect("mydatabase.db") as conn:
-        data.to_sql(table_name, conn, if_exists="append", index=False)
+        data.to_sql(table_name, conn, if_exists="replace", index=False)
     return fields
 
 

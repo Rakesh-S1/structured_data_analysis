@@ -56,5 +56,19 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
             st.subheader("the response is:")
             if response:
                 df = pd.DataFrame(response, columns=column)
-                st.markdown(create_styled_table(df), unsafe_allow_html=True)
+                df = create_styled_table(df)
+                if 'final_df' not in st.session_state:
+                    st.session_state.final_df = None
+                st.session_state.final_df = df    
+                st.table(df)
+                if st.checkbox('Show Age Distribution Plot'):
+                    st.header('Age Distribution')
+                    plt.figure(figsize=(10, 6))
+                    sns.histplot(st.session_state.final_df['Age'], kde=True)
+                    plt.title('Age Distribution')
+                    plt.xlabel('Age')
+                    plt.ylabel('Frequency')
+                    st.pyplot(plt)
+
+                # st.markdown(create_styled_table(df), unsafe_allow_html=True)
                 # st.table(df)
