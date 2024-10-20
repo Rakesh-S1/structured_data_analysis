@@ -1,6 +1,7 @@
 from backend import *
 
-st.set_page_config(page_title="SQL Query Retriever")
+st.set_page_config(page_title="SQL Query Retriever", layout='centered', page_icon='📈')
+st.title('📈 SQL generator')
 st.header("Upload Your Data File")
 uploaded_file = st.file_uploader("Choose a file", type=["csv", "json"])
 if uploaded_file is not None:
@@ -10,6 +11,7 @@ if uploaded_file is not None:
         file_type = "j"
     else:
         st.error("Unsupported file type. Please upload a CSV or JSON file.")
+        
     if "table_name" not in st.session_state:
         st.session_state.table_name = ""
     table_name = os.path.splitext(uploaded_file.name)[0]

@@ -10,10 +10,50 @@ load_dotenv()
 genai.configure(api_key=os.getenv("api_key"))
 
 def create_styled_table(df):
-    # Convert DataFrame to HTML and add bold styling to headers
-    styled_table = df.to_html(index=False)
-    styled_table = styled_table.replace('<th>', '<th style="font-weight:bold">')
-    return styled_table
+    # Convert DataFrame to HTML
+    table_html = df.to_html(index=False, classes='styled-table', escape=False)
+    
+    # Define custom CSS for table
+    table_style = """
+    <style>
+    .styled-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 18px;
+        font-family: Arial, sans-serif;
+        min-width: 400px;
+        width: 100%;
+        text-align: left;
+    }
+    .styled-table th {
+        background-color: #4CAF50;
+        color: white;
+        font-weight: bold;
+        padding: 12px 15px;
+    }
+    .styled-table td {
+        padding: 12px 15px;
+    }
+    .styled-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+    .styled-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+    .styled-table tbody tr:last-of-type {
+        border-bottom: 2px solid #4CAF50;
+    }
+    .table-container {
+        max-height: 400px;  /* Fixed height for the table */
+        overflow-y: auto;   /* Scrollable content */
+        width: 100%;
+    }
+    </style>
+    """
+    
+    # Combine table style and content
+    full_html = f"{table_style}<div class='table-container'>{table_html}</div>"
+    return full_html
 
 def data_ingestion(dataset, table_name, type: Literal["c", "j"] = "c"):
     if type == "c":
