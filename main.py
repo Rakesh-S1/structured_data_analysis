@@ -14,7 +14,7 @@ if uploaded_file is not None:
         
     if "table_name" not in st.session_state:
         st.session_state.table_name = ""
-    table_name = os.path.splitext(uploaded_file.name)[0].replace('-','_')
+    table_name = os.path.splitext(uploaded_file.name)[0].replace('-','_').replace(' ','')
     st.session_state.table_name = table_name
     if "prompt" not in st.session_state:
         st.session_state.prompt = []
@@ -61,16 +61,9 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
                     st.session_state.final_df = None
                 st.session_state.final_df = df    
                 # st.table(df)
-                st.markdown('<div class="scrollable-table">'+ df.to_html()+'</div>', unsafe_allow_html=True)
+                st.dataframe(df)
+                # st.markdown('<div class="scrollable-table">'+ df.to_html()+'</div>', unsafe_allow_html=True)
 
-                if st.checkbox('Show Age Distribution Plot'):
-                    st.header('Age Distribution')
-                    plt.figure(figsize=(10, 6))
-                    sns.histplot(st.session_state.final_df['Age'], kde=True)
-                    plt.title('Age Distribution')
-                    plt.xlabel('Age')
-                    plt.ylabel('Frequency')
-                    st.pyplot(plt)
-
+    
                 # st.markdown(create_styled_table(df), unsafe_allow_html=True)
                 # st.table(df)
