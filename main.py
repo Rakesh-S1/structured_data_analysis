@@ -14,7 +14,7 @@ if uploaded_file is not None:
         
     if "table_name" not in st.session_state:
         st.session_state.table_name = ""
-    table_name = os.path.splitext(uploaded_file.name)[0]
+    table_name = os.path.splitext(uploaded_file.name)[0].replace('-','_')
     st.session_state.table_name = table_name
     if "prompt" not in st.session_state:
         st.session_state.prompt = []
@@ -60,7 +60,9 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
                 if 'final_df' not in st.session_state:
                     st.session_state.final_df = None
                 st.session_state.final_df = df    
-                st.table(df)
+                # st.table(df)
+                st.markdown('<div class="scrollable-table">'+ df.to_html()+'</div>', unsafe_allow_html=True)
+
                 if st.checkbox('Show Age Distribution Plot'):
                     st.header('Age Distribution')
                     plt.figure(figsize=(10, 6))

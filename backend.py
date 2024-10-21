@@ -13,26 +13,31 @@ genai.configure(api_key=os.getenv("api_key"))
 def create_styled_table(df):
     # Convert DataFrame to HTML
     st.markdown(
-        '''
-        <style>
-        .dataframe thead th {
-            font-weight: bold;
-            text-align: center;
-        }
-        .dataframe tbody tr td {
-            text-align: center;
-        }
-        </style>
-        ''',
-        unsafe_allow_html=True
+    '''
+    <style>
+    .scrollable-table {
+        max-height: 500px;  /* Set the maximum height for the table */
+        overflow-y: auto;   /* Enable vertical scrolling */
+    }
+    .dataframe thead th {
+        font-weight: bold;
+        text-align: center;
+    }
+    .dataframe tbody tr td {
+        text-align: center;
+    }
+    </style>
+    ''',
+    unsafe_allow_html=True
     )
-    
+
+    # Apply styles and render table inside a scrollable div
     styled_df = df.style.set_properties(**{
         'text-align': 'center'
     }).set_table_styles(
         [{'selector': 'thead th', 'props': [('font-weight', 'bold')]}]
     )
-    
+
     return styled_df
 
 def data_ingestion(dataset, table_name, type: Literal["c", "j"] = "c"):
