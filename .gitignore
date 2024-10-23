@@ -3,11 +3,8 @@ SDA
 streamlit
 SDA
 datasets
-<<<<<<< HEAD
 mydatabase.db
 table1.csv
 table2.csv
-=======
 __pycache__
 __pycache__
->>>>>>> 9c7675309f1585e8ccdd81bed0b256b7cb465d4f
