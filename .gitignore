@@ -3,3 +3,6 @@ SDA
 streamlit
 SDA
 datasets
+mydatabase.db
+table1.csv
+table2.csv
