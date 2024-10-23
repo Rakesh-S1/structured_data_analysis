@@ -132,9 +132,7 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
     question = st.text_input("Enter your query")
     st.session_state.question = question
     if st.button("Get data"):
-        print(1)
-        print(st.session_state.question)
-        print(st.session_state.prompt)
+
         response = (
             get_gemini_response(
                 question=st.session_state.question, prompt=st.session_state.prompt[0]
@@ -143,18 +141,26 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
             .replace("sql", "")
             .strip()
         )
+        print(response)
         column, response = read_sql_query(response, "mydatabase.db")
         print(column, response)
         
         st.subheader("the response is:")
         if response:
-            df = remove_duplicate_columns(columns=column, data=response)
-        #     # df = create_styled_table(df)
+        #     pass
+        # #     df = remove_duplicate_columns(columns=column, data=response)
+        # # #     # df = create_styled_table(df)
             if 'final_df' not in st.session_state:
                 st.session_state.final_df = None
-            st.session_state.final_df = df    
-            # st.table(df)
-            st.dataframe(st.session_state.final_df)
+            print(column,'\n', response)
+            try :
+                st.session_state.final_df = pd.DataFrame(columns=column, data=response)    
+                st.dataframe(st.session_state.final_df)
+            except:
+                # df = create_styled_table(response)
+                # st.table(df)
+                pass
+
 
 
 #     st.session_state.table_name = table_name
