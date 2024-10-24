@@ -16,13 +16,10 @@ if "question" not in st.session_state:
     st.session_state.question = []
 if "data_ingested" not in st.session_state:
     st.session_state.data_ingested = False
-st.header("Upload Your Data File")
-uploaded_files = st.file_uploader(
-    "Choose files", type=["csv", "json"], accept_multiple_files=True
-)
 
 
-def pre__(file_type, table_name):
+
+def pre__(file_type, table_name, uploaded_file):
     """
     Ingests data from a file into a specified table and updates the session state.
     """
@@ -44,7 +41,6 @@ def remove_duplicate_columns(columns, data):
     and returns a DataFrame with duplicates removed.
     """
     df = pd.DataFrame(data, columns=columns)
-
     column_groups = {}
     for col in df.columns:
         if col not in column_groups:
@@ -59,6 +55,9 @@ def remove_duplicate_columns(columns, data):
                 for dup_col in group[1:]:
                     df = df.drop(dup_col.name, axis=1)  # Drop duplicates
 
+    # df_transposed = df.T
+    # df_transposed = df_transposed.drop_duplicates(keep='first')
+    # return df_transposed.T
     return df
 
 
@@ -87,10 +86,12 @@ def prompttttt(a: dict):
     for i, j in a.items():
         b[0] += f"table {i} has fields {j}\n"
     print(b)
-    st.write(b)
     st.session_state.prompt = b
 
-
+st.header("Upload Your Data File")
+uploaded_files = st.file_uploader(
+    "Choose files", type=["csv", "json"], accept_multiple_files=True
+)
 if uploaded_files and st.button("Ingest Data"):
     for uploaded_file in uploaded_files:
         if uploaded_file.name.endswith(".csv"):
@@ -101,7 +102,7 @@ if uploaded_files and st.button("Ingest Data"):
                 .replace(" ", "")
             )
 
-            pre__(file_type, st.session_state.table_name)
+            pre__(file_type, st.session_state.table_name, uploaded_file)
         elif uploaded_file.name.endswith(".json"):
             file_type = "j"
         else:
@@ -111,7 +112,6 @@ if uploaded_files and st.button("Ingest Data"):
             )
         st.session_state.data_ingested = True
 
-st.text(st.session_state.tables)
 
 prompttttt(st.session_state.tables)
 if "data_ingested" in st.session_state and st.session_state.data_ingested:
@@ -129,6 +129,8 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
             .strip()
         )
         print(response)
+        st.subheader('the generated SQL query:')
+        st.write(response)
         column, response = read_sql_query(response, "mydatabase.db")
         print(column, response)
 
@@ -141,12 +143,10 @@ if "data_ingested" in st.session_state and st.session_state.data_ingested:
                 st.session_state.final_df = None
             print(column, '\n', response)
             try:
-                st.session_state.final_df = pd.DataFrame(
-                    columns=column, data=response)
+                st.session_state.final_df = pd.DataFrame(columns=column, data=response)
                 st.dataframe(st.session_state.final_df)
             except:
                 # df = create_styled_table(response)
                 # st.table(df)
-                st.session_state.final_df = remove_duplicate_columns(
-                    columns=column, data=response)
+                st.session_state.final_df = remove_duplicate_columns(columns=column, data=response)
                 st.dataframe(st.session_state.final_df)
