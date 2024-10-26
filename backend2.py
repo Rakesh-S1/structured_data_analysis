@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 import os
 import google.generativeai as genai
 import pdfplumber
+import ast
+
 
 load_dotenv()
 genai.configure(api_key=os.getenv("api_key"))
@@ -13,9 +15,7 @@ def extract_text_from_pdf(pdf_path):
             text_data += page.extract_text()
     return text_data
 
-pdf_path = 'Sales_Report.pdf'
-text_data = extract_text_from_pdf(pdf_path)
-print("Extracted Text:", text_data)
+
 
 def prompt_pdf(text_data):
     prompt = '''
@@ -80,8 +80,26 @@ def prompt_pdf(text_data):
     prompt+=text_data
     return prompt
 
+def model_output_preprocess(table_content:str):
+    
+    try:
+        table_content = table_content.split("=", 1)[1].strip()
+    except IndexError:
+        table_content = table_content.strip()
+    
+    table_content = table_content.replace('(','[').replace(')',']')
+    table_content = ast.literal_eval(table_content)
+    print(type(table_content))
+    return table_content
+
+pdf_path = 'Sales_Report_Sample.pdf'
+text_data = extract_text_from_pdf(pdf_path)
+print("Extracted Text:", text_data)
+
 model = genai.GenerativeModel("gemini-pro")
 response = model.generate_content(prompt_pdf(text_data=text_data))
 a = response.text
 a= a.replace('```','')
-print(a)
+
+print(model_output_preprocess(a))
+

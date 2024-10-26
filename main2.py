@@ -1,5 +1,5 @@
 from backend import *
-
+from backend2 import *
 st.set_page_config(page_title="SQL Query Retriever",
                    layout="centered", page_icon="📈")
 
