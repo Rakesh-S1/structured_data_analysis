@@ -3,7 +3,7 @@ import os
 import google.generativeai as genai
 import pdfplumber
 import ast
-
+import sqlite3, pandas as pd
 
 load_dotenv()
 genai.configure(api_key=os.getenv("api_key"))
@@ -38,7 +38,7 @@ def prompt_pdf(text_data):
         Output:
         {
             "Employee Records": [
-                ("Employee Records", "Employee ID", "Name", "Age", "Department", "Salary"),
+                ("Employee ID", "Name", "Age", "Department", "Salary"),
                 ("E001", "John Doe", 30, "Marketing", 60000),
                 ("E002", "Jane Smith", 28, "Sales", 55000),
                 ("E003", "Mike Johnson", 35, "IT", 70000)
@@ -61,13 +61,13 @@ def prompt_pdf(text_data):
         Output:
         {
             "Inventory List": [
-                ("Inventory List", "Item ID", "Item Name", "Quantity", "Price"),
+                ("Item ID", "Item Name", "Quantity", "Price"),
                 ("I001", "Laptop", 50, 1200.00),
                 ("I002", "Mouse", 150, 25.00),
                 ("I003", "Keyboard", 100, 45.00)
             ],
             "Employee Records":[
-            ("Employee Records", "Employee ID", "Name", "Age", "Department", "Salary"),
+                ("Employee ID", "Name", "Age", "Department", "Salary"),
                 ("E001", "John Doe", 30, "Marketing", 60000),
                 ("E002", "Jane Smith", 28, "Sales", 55000),
                 ("E003", "Mike Johnson", 35, "IT", 70000)
@@ -80,7 +80,36 @@ def prompt_pdf(text_data):
     prompt+=text_data
     return prompt
 
+from pprint import pprint
+def ingestion(a:dict):
+    conn = sqlite3.connect('sales_report.db')  # Create or connect to a database
+
+    # Iterate over each table in the dictionary
+    for table_name, rows in a.items():
+        # Extract header and data rows
+        columns = rows[0]  # Get the header row
+        data_rows = rows[1:]  # Get the data rows
+
+        # Print for debugging
+        print(f"Table: {table_name}")
+        print(f"Columns: {columns}")
+        print("Data Rows:")
+        print(data_rows)
+
+        # Create a DataFrame
+        df = pd.DataFrame(data_rows, columns=columns)
+
+        # Write the DataFrame to SQL database
+        df.to_sql(table_name, conn, if_exists="replace", index=False)
+
+    # Close the connection
+    conn.close()
+    pprint(a)
+
+
+
 def model_output_preprocess(table_content:str):
+
     
     try:
         table_content = table_content.split("=", 1)[1].strip()
@@ -89,7 +118,8 @@ def model_output_preprocess(table_content:str):
     
     table_content = table_content.replace('(','[').replace(')',']')
     table_content = ast.literal_eval(table_content)
-    print(type(table_content))
+    print(table_content)
+
     return table_content
 
 pdf_path = 'Sales_Report_Sample.pdf'
@@ -101,5 +131,7 @@ response = model.generate_content(prompt_pdf(text_data=text_data))
 a = response.text
 a= a.replace('```','')
 
-print(model_output_preprocess(a))
+a = model_output_preprocess(a)
+ingestion(a)
+
 
