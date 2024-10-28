@@ -1,100 +1,62 @@
-"1. Write a Python program to reverse a string.",
-"2. Write a Python program to check if a number is prime.",
-"3. Write a Python program to find the largest number in a list.",
-"4. Write a Python program to find the smallest number in a list.",
-"5. Write a Python program to generate the Fibonacci sequence up to n terms.",
-"6. Write a Python program to find the sum of all elements in a list.",
-"7. Write a Python program to check if a number is a palindrome.",
-"8. Write a Python program to find the length of a list without using len().",
-"9. Write a Python program to count the occurrences of each element in a list.",
-"10. Write a Python program to generate a list of even numbers from 1 to 100.",
-"11. Write a Python program to remove duplicates from a list.",
-"12. Write a Python program to check if a string is a palindrome.",
-"13. Write a Python program to find the second largest number in a list.",
-"14. Write a Python program to swap the values of two variables without a temp variable.",
-"15. Write a Python program to merge two sorted lists.",
-"16. Write a Python program to remove all vowels from a string.",
-"17. Write a Python program to count the number of words in a sentence.",
-"18. Write a Python program to calculate the sum of the digits of a number.",
-"19. Write a Python program to check if a list is sorted.",
-"20. Write a Python program to convert a binary number to decimal.",
-"21. Write a Python program to find the mode of a list.",
-"22. Write a Python program to calculate the LCM of two numbers.",
-"23. Write a Python program to remove a specific element from a list by value.",
-"24. Write a Python program to merge two dictionaries.",
-"25. Write a Python program to check if a year is a leap year.",
-"26. Write a Python program to generate the multiplication table for a given number.",
-"27. Write a Python program to count the number of uppercase and lowercase letters in a string.",
-"28. Write a Python program to sort a list of dictionaries by a specific key.",
-"29. Write a Python program to find the intersection of two lists.",
-"30. Write a Python program to check if a list contains any duplicates.",
-"31. Write a Python program to flatten a nested list.",
-"32. Write a Python program to calculate the area of a triangle.",
-"33. Write a Python program to find the most frequent element in a list.",
-"34. Write a Python program to convert a decimal number to binary.",
-"35. Write a Python program to find the transpose of a matrix.",
-"36. Write a Python program to find the minimum and maximum element in a dictionary.",
-"37. Write a Python program to convert a list of strings to a single string.",
-"38. Write a Python program to check if a number is a perfect square.",
-"39. Write a Python program to count the frequency of words in a sentence.",
-"40. Write a Python program to calculate the compound interest.",
-"41. Write a Python program to remove punctuation from a string.",
-"42. Write a Python program to convert temperature from Celsius to Fahrenheit.",
-"43. Write a Python program to check if a string contains only digits.",
-"44. Write a Python program to check if two lists are disjoint.",
-"45. Write a Python program to find the difference between two lists.",
-"46. Write a Python program to calculate the sum of all odd numbers up to n.",
-"47. Write a Python program to reverse the words in a sentence.",
-"48. Write a Python program to find the smallest positive integer missing from a list.",
-"49. Write a Python program to calculate the Hamming distance between two strings.",
-"50. Write a Python program to check if two strings are anagrams.",
-"51. Write a Python program to find the longest word in a sentence.",
-"52. Write a Python program to find the average of a list of numbers.",
-"53. Write a Python program to convert a list of tuples into a dictionary.",
-"54. Write a Python program to check if a string is a valid email address.",
-"55. Write a Python program to find the maximum product of two elements in a list.",
-"56. Write a Python program to count the number of consonants in a string.",
-"57. Write a Python program to check if a string is a pangram.",
-"58. Write a Python program to find the longest increasing subsequence in a list.",
-"59. Write a Python program to calculate the sum of elements in a dictionary.",
-"60. Write a Python program to find the longest substring without repeating characters.",
-"61. Write a Python program to check if a list is a subset of another list.",
-"62. Write a Python program to calculate the perimeter of a rectangle.",
-"63. Write a Python program to find the least frequent element in a list.",
-"64. Write a Python program to calculate the Euclidean distance between two points.",
-"65. Write a Python program to find the cumulative sum of a list.",
-"66. Write a Python program to generate all permutations of a list.",
-"67. Write a Python program to check if a matrix is symmetric.",
-"68. Write a Python program to find the next palindrome greater than a given number.",
-"69. Write a Python program to calculate the minimum cost path in a matrix from top-left to bottom-right.",
-"70. Write a Python program to find the largest palindrome in a string.",
-"71. Write a Python program to find the second smallest number in a list.",
-"72. Write a Python program to generate Pascal's triangle up to n rows.",
-"73. Write a Python program to find the common elements in two dictionaries.",
-"74. Write a Python program to find the maximum and minimum of a list.",
-"75. Write a Python program to check if a string is an empty string.",
-"76. Write a Python program to extract all digits from a string.",
-"77. Write a Python program to convert a list of integers to a list of strings.",
-"78. Write a Python program to find the sum of the squares of numbers in a list.",
-"79. Write a Python program to calculate the frequency of each character in a string.",
-"80. Write a Python program to find the intersection of three lists.",
-"81. Write a Python program to find the number of prime numbers less than n.",
-"82. Write a Python program to count how many times each number appears in a list.",
-"83. Write a Python program to reverse a list in place.",
-"84. Write a Python program to calculate the product of all elements in a list.",
-"85. Write a Python program to find the common elements in two arrays.",
-"86. Write a Python program to check if a number is in a list.",
-"87. Write a Python program to find the first non-repeating character in a string.",
-"88. Write a Python program to create a list of squares of numbers from 1 to n.",
-"89. Write a Python program to check if a string is a valid palindrome considering spaces.",
-"90. Write a Python program to calculate the sum of all even numbers in a list.",
-"91. Write a Python program to generate a random password.",
-"92. Write a Python program to find the index of a given element in a list.",
-"93. Write a Python program to create a histogram from a list of numbers.",
-"94. Write a Python program to check if two strings are equal ignoring case.",
-"95. Write a Python program to count the number of unique elements in a list.",
-"96. Write a Python program to find the longest sequence of repeated characters in a string.",
-"97. Write a Python program to create a list of all multiples of 3 or 5 below 100.",
-"98. Write a Python program to calculate the sum of a list of mixed data types.",
-"99. Write a Python program to find the longest consecutive sequence in a list.",
-"100. Write a Python program to implement a basic calculator.",
+import os
+import google.generativeai as genai
+import pdfplumber
+import sqlite3
+import pandas as pd
+import ast
+from dotenv import load_dotenv
+from pprint import pprint
+
+# Load environment variables
+load_dotenv()
+genai.configure(api_key=os.getenv("api_key"))
+
+def extract_tables_from_pdf(pdf_path):
+    tables = []
+    with pdfplumber.open(pdf_path) as pdf:
+        for page in pdf.pages:
+            extracted_tables = page.extract_tables()
+            tables.extend(extracted_tables)
+    return tables
+
+def prompt_table_data(table_data):
+    prompt = '''You are an expert data engineer/analyst. I will provide table content below. 
+    I want you to return this table content along with a generated table name. 
+    Please return this in a dictionary format, 
+    where the key is the table name, and the value is a list of tuples containing the table content.
+    Do not include any formatting characters like ``` in your output.
+    Here is the table content:'''
+    prompt += str(table_data)
+    return prompt
+
+def ingestion(tables_dict):
+    conn = sqlite3.connect('sales_report.db')  # Create or connect to a database
+    for table_name, rows in tables_dict.items():
+        columns = rows[0]  # Get the header row
+        data_rows = rows[1:]  # Get the data rows
+        df = pd.DataFrame(data_rows, columns=columns)
+        df.to_sql(table_name, conn, if_exists="replace", index=False)
+    conn.close()
+    pprint(tables_dict)
+
+def model_output_preprocess(output_text):
+    table_content = output_text.strip()
+    table_content = table_content.replace('(','[').replace(')',']')
+    table_content = ast.literal_eval(table_content)
+    return table_content
+
+# Example execution
+pdf_path = './M-Review_July 2024 2-1-22/M-Review_July 2024 2-4.pdf'
+tables = extract_tables_from_pdf(pdf_path)
+
+# For simplicity, use a loop to process each table
+all_tables_dict = {}
+model = genai.GenerativeModel("gemini-pro")
+for table_data in tables:
+    if table_data:
+        prompt = prompt_table_data(table_data)
+        response = model.generate_content(prompt)
+        table_dict = model_output_preprocess(response.text.replace('```', ''))
+        all_tables_dict.update(table_dict)
+
+ingestion(all_tables_dict)
