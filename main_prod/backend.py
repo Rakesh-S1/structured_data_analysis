@@ -23,14 +23,14 @@ def extract_text_from_pdf(pdf_path):
 
 def prompt_design_pdf(text_data):
     prompt = """
-        You are an expert data engineer/analyst. I will mention below non-table content and table content. 
-        I want you to return only the table content along with a generated table name. 
-        Please return this in a dictionary format, 
-        where the key is the table name, and the value is a list of tuples containing the table name and its content.
-        Do not include any formatting characters like ``` in your output.
-        I want you to handle all the tables present,Ensure that all tables in the input are extracted and included in the output.
+            You are an expert data engineer/analyst. I will mention below non-table content and table content. 
+            I want you to return only the table content along with a generated table name. 
+            Please return this in a dictionary format, 
+            where the key is the table name, and the value is a list of tuples containing the table name and its content.
+            Do not include any formatting characters like ``` in your output.
+            I want you to handle all the tables present,Ensure that all tables in the input are extracted and included in the output.
 
-        Here are some examples for reference:
+            Here are some examples for reference:
 
         Example 1:
         Extracted Text: Employee Records
