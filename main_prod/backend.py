@@ -77,6 +77,45 @@ def prompt_design_pdf(text_data):
                 ("E003", "Mike Johnson", 35, "IT", 70000)
             ]
         }
+        
+        Extracted Text: BTO
+        Zero Days Zero Days Zero Days Zero Days Zero Days Zero Days
+        MU
+        (Jan) (Feb) (Mar) (Apr) (May) (June)
+        NA CPRS 3171 2792 2734 1668 1607 1484
+        NA MALS 3148 2817 2789 1818 1629 1530
+        NA TMT 1495 1266 1141 780 759 724
+        Others 893 782 721 491 409 397
+        NA EUC 627 596 560 379 349 318
+        NA CANADA 196 157 189 107 104 98
+        Grand Total 9530 8410 8134 5243 4857 4551
+        Zero Days Zero Days Zero Days Zero Days Zero Days Zero Days
+        Practice
+        (Jan) (Feb) ( Mar) (Apr) (May) (Jun)
+        Testing 1915 1594 1420 856 818 723
+        Central 213 169 126 102 88 87
+        Sector 14 7 5 3 4 2
+        Grand Total 2142 1770 1551 961 910 812
+        output:{
+            
+        "MU":[
+            ("MU",Zero Days\n(Jan), Zero Days\n(Feb), Zero Days\n(Mar), Zero Days\n(Apr), Zero Days\n(May),  Zero Days\n(June)),
+            ("NA CPRS" 3171, 2792, 2734, 1668, 1607, 1484),
+        ("NA MALS", 3148, 2817, 2789, 1818, 1629, 1530),
+        ("NA TMT", 1495, 1266, 1141, 780, 759, 724),
+        ("Others", 893, 782, 721, 491, 409, 397),
+        ("NA EUC", 627, 596, 560, 379, 349, 318),
+        ("NA CANADA", 196, 157, 189, 107, 104, 98),
+        ("Grand Total", 9530, 8410, 8134, 5243, 4857, 4551)
+        ],
+        "Practice":[
+        ("Practice", Zero Days\n(Jan), Zero Days\n(Feb), Zero Days\n( Mar), Zero Days\n(Apr), Zero Days\n(May), Zero Days\n(Jun))
+        (Testing 1915 ,1594 ,1420 ,856 ,818 ,723),
+        (Central 213 ,169 ,126 ,102 ,88 ,87),
+        (Sector 14 ,7 ,5 ,3 ,4 ,2),
+        (Grand Total ,2142 ,1770 ,1551 ,961 ,910, 812)
+        ]
+        }
 
         Now, based on the extracted text below, please provide the output:
 
@@ -109,7 +148,7 @@ def pdf_to_dict(a: dict):
         print(columns)
         data_rows = rows[1:]
         df = pd.DataFrame(data_rows, columns=columns)
-        table_name = table_name.replace("-", "_").replace(" ", "")
+        table_name = table_name.replace("-", "_").replace(" ", "").replace('[','').replace(']','').replace('<','').replace('>','')
         st.session_state.tables[table_name] = columns
         data_ingest(table_name, df)
 

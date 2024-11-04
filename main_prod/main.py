@@ -45,9 +45,10 @@ if uploaded_files and st.button("Ingest Data"):
             textdata = extract_text_from_pdf(uploaded_file)
             print("Extracted Text:", textdata)
             model = genai.GenerativeModel("gemini-pro")
-            response = model.generate_content(prompt_design_pdf(text_data=textdata))
+            response = model.generate_content(prompt_design_pdf(textdata))
             a = response.text
             a = a.replace("```", "")
+            print(a)
             pdf_to_dict(table_output_preprocess(a))
             print(st.session_state.tables)
         else:

@@ -112,7 +112,7 @@ def model_output_preprocess(table_content:str):
 
     return table_content
 
-pdf_path = './M-Review_July 2024 2-1-22/M-Review_July 2024 2-4.pdf '
+pdf_path = './M-Review_July 2024 2-1-22/M-Review_July 2024 2-18.pdf '
 text_data = extract_text_from_pdf(pdf_path)
 
 model = genai.GenerativeModel("gemini-pro")
@@ -120,7 +120,8 @@ response = model.generate_content(prompt_pdf(text_data=text_data))
 a = response.text
 a= a.replace('```','')
 
-# a = model_output_preprocess(a)
-# ingestion(a)
+a = model_output_preprocess(a)
+ingestion(a)
 
-print(a)
+# print(text_data)
+# 
